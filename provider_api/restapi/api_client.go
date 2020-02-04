@@ -174,6 +174,8 @@ func (client *api_client) send_request(method string, path string, data string) 
                  log.Printf("Replace 4 %s\n", body4)
                  data = strings.Replace(body4, "}", "", -1)
                  log.Printf("Replace 5 %s\n", data)
+		data = strings.Replace(body4, "\\u0026", "&", -1)
+                 log.Printf("Replace 5 %s\n", data)
 
 
         if client.debug {
