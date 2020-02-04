@@ -170,9 +170,9 @@ func (client *api_client) send_request(method string, path string, data string) 
                  log.Printf("Replace 2 %s\n", body2)
                 body3 := strings.Replace(body2, "\"", "", -1)
                  log.Printf("Replace 3 %s\n", body3)
-                 body4 := strings.Replace(body3, "{", "\"", -1)
+                 body4 := strings.Replace(body3, "{", "", -1)
                  log.Printf("Replace 3 %s\n", body4)
-                 data = strings.Replace(body4, "}", "\"", -1)
+                 data = strings.Replace(body4, "}", "", -1)
                  log.Printf("Replace 3 %s\n", data)
 
 
