@@ -192,15 +192,22 @@ func (obj *api_object) create_object() error {
 	   protect here also. If no id is set, and the API does not respond
 	   with the id of whatever gets created, we have no way to know what
 	   the object's id will be. Abandon this attempt */
-	if obj.id == "" && !obj.api_client.write_returns_object && !obj.api_client.create_returns_object {
+log.Printf("inside api_object 1 object %d",obj.id)	
+if obj.id == "" && !obj.api_client.write_returns_object && !obj.api_client.create_returns_object {
 		return errors.New("ERROR: Provided object does not have an id set and the client is not configured to read the object from a POST or PUT response. Without an id, the object cannot be managed.")
 	}
+log.Printf("insode api_object 2 data = %s",obj.data)
 
 	b, _ := json.Marshal(obj.data)
 	res_str, err := obj.api_client.send_request(obj.api_client.create_method, strings.Replace(obj.post_path, "{id}", obj.id, -1), string(b))
 	if err != nil {
 		return err
 	}
+
+	 log.Printf("inside the loop for testing api_object.go beforei the if statement")
+
+  log.Printf("api_object.go: Parsing response from POST to update internal structures (write_returns_object=%t, create_returns_object=%t)...\n",
+                                obj.api_client.write_returns_object, obj.api_client.create_returns_object)
 
 	/* We will need to sync state as well as get the object's ID */
 	if obj.api_client.write_returns_object || obj.api_client.create_returns_object {
@@ -209,12 +216,14 @@ func (obj *api_object) create_object() error {
 				obj.api_client.write_returns_object, obj.api_client.create_returns_object)
 		}
 		err = obj.update_state(res_str)
+
 		/* Yet another failsafe. In case something terrible went wrong internally,
 		   bail out so the user at least knows that the ID did not get set. */
 		if obj.id == "" {
 			return errors.New("Internal validation failed. Object ID is not set, but *may* have been created. This should never happen!")
 		}
 	} else {
+
 		if obj.debug {
 			log.Printf("api_object.go: Requesting created object from API (write_returns_object=%t, create_returns_object=%t)...\n",
 				obj.api_client.write_returns_object, obj.api_client.create_returns_object)
