@@ -196,10 +196,15 @@ log.Printf("inside api_object 1 object %d",obj.id)
 if obj.id == "" && !obj.api_client.write_returns_object && !obj.api_client.create_returns_object {
 		return errors.New("ERROR: Provided object does not have an id set and the client is not configured to read the object from a POST or PUT response. Without an id, the object cannot be managed.")
 	}
-log.Printf("insode api_object 2 data = %s",obj.data)
+
+log.Printf("insode api_object 2 data = %s",)
 
 	b, _ := json.Marshal(obj.data)
+log.Printf("insode api_object 2 jason to string  = %s",string(b))
+
 	res_str, err := obj.api_client.send_request(obj.api_client.create_method, strings.Replace(obj.post_path, "{id}", obj.id, -1), string(b))
+
+
 	if err != nil {
 		return err
 	}
